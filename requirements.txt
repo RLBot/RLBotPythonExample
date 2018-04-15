@@ -1,0 +1,2 @@
+# Include everything the framework requires
+-r build/framework/requirements.txt

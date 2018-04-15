@@ -99,3 +99,13 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Intellij
+*.iml
+/.idea
+
+# Build output
+/build
+
+# Gradle files
+/.gradle

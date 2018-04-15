@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compile 'com.github.RLBot:RLBot:v4-SNAPSHOT:python@zip'  // Fetch the python zip
+}
+
+def findFile(suffix) {
+    configurations.compile.filter { it.name.endsWith(suffix) }
+}
+
+task assemblePython(type: Copy) {
+    from zipTree(findFile('python.zip').singleFile)
+    into 'build/framework'
+}
+
+task pipInstallRequirements(type: Exec) {
+    commandLine "pip", "install", "-r", "requirements.txt"
+}
+
+task tournamentZip(type: Zip) {
+    from fileTree(dir: 'python_example', exclude: '**/__pycache__')
+}
+
+processResources.dependsOn assemblePython
+assemblePython.dependsOn pipInstallRequirements
+
