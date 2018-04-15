@@ -1,23 +1,33 @@
+// This file controls gradle, which we are using to install and update the RLBot framework used by this example bot.
+
+// There's no java in this example, but we still need the plugin to make our strategy work for downloading
+// the framework zip.
 apply plugin: 'java'
 
 repositories {
-    jcenter()
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile 'com.github.RLBot:RLBot:v4-SNAPSHOT:python@zip'  // Fetch the python zip
+    // Fetch the framework zip file. This will automatically stay up-to-date with the latest changes in the v4 branch.
+    // This is useful for automatically getting fixes when the framework breaks due to Rocket League patches.
+    // For different behavior, e.g. freezing at a specific version of the framework, see https://jitpack.io/docs/
+    compile 'com.github.RLBot:RLBot:v4-SNAPSHOT:python@zip'
 }
 
+// Handy helper method for finding the actual files involved with a compile dependency.
 def findFile(suffix) {
     configurations.compile.filter { it.name.endsWith(suffix) }
 }
 
-task assemblePython(type: Copy) {
+// Extracts the RLBot framework zip into a directory in ./build/framework so it can be used by the bot.
+task prepareFrameworkDirectory(type: Copy) {
     from zipTree(findFile('python.zip').singleFile)
     into 'build/framework'
 }
 
+// Uses pip (the python package manager) to install all the python packages needed for this bot, as defined
+// in requirements.txt.
 task pipInstallRequirements(type: Exec) {
     commandLine "pip", "install", "-r", "requirements.txt"
 }
@@ -26,6 +36,11 @@ task tournamentZip(type: Zip) {
     from fileTree(dir: 'python_example', exclude: '**/__pycache__')
 }
 
-processResources.dependsOn assemblePython
-assemblePython.dependsOn pipInstallRequirements
+// Installs or updates RLBot. Empty task for now. It still does stuff because it "dependsOn" tasks that do things.
+task updateRLBot
+updateRLBot.dependsOn pipInstallRequirements
+updateRLBot.dependsOn prepareFrameworkDirectory
 
+// Must prepare the framework directory before running pip because the requirements.txt file references another one
+// inside the framework directory.
+pipInstallRequirements.dependsOn prepareFrameworkDirectory
