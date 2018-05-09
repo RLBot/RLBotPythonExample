@@ -1,18 +1,23 @@
 import math
 
-from RLBotFramework.agents.base_agent import BaseAgent
+from RLBotFramework.agents.base_flatbuffer_agent import BaseFlatbufferAgent, SimpleControllerState
+from RLBotMessages.flat import GameTickPacket
 
 URotationToRadians = math.pi / float(32768)
 
 
-class PythonExample(BaseAgent):
+class PythonExample(BaseFlatbufferAgent):
 
-    def get_output_vector(self, game_tick_packet):
+    def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
+        controller_state = SimpleControllerState()
 
-        ball_location = Vector2(game_tick_packet.gameball.Location.X, game_tick_packet.gameball.Location.Y)
+        if packet.Ball() is None:  # This happens during replays
+            return controller_state
 
-        my_car = game_tick_packet.gamecars[self.index]
-        car_location = Vector2(my_car.Location.X, my_car.Location.Y)
+        ball_location = Vector2(packet.Ball().Physics().Location().X(), packet.Ball().Physics().Location().Y())
+
+        my_car = packet.Players(self.index)
+        car_location = Vector2(my_car.Physics().Location().X(), my_car.Physics().Location().Y())
         car_direction = get_car_facing_vector(my_car)
         car_to_ball = ball_location - car_location
 
@@ -20,20 +25,14 @@ class PythonExample(BaseAgent):
 
         if steer_correction_radians > 0:
             # Positive radians in the unit circle is a turn to the left.
-            turn = -1.0 # Negative value for a turn to the left.
+            turn = -1.0  # Negative value for a turn to the left.
         else:
             turn = 1.0
 
-        return [
-            1.0,  # throttle
-            turn,  # steer
-            0.0,  # pitch
-            0.0,  # yaw
-            0.0,  # roll
-            0,  # jump
-            0,  # boost
-            0  # handbrake
-        ]
+        controller_state.throttle = 1.0
+        controller_state.steer = turn
+
+        return controller_state
 
 
 class Vector2:
@@ -65,10 +64,10 @@ class Vector2:
 
 
 def get_car_facing_vector(car):
-    pitch = float(car.Rotation.Pitch)
-    yaw = float(car.Rotation.Yaw)
+    pitch = car.Physics().Rotation().Pitch()
+    yaw = car.Physics().Rotation().Yaw()
 
-    facing_x = math.cos(pitch * URotationToRadians) * math.cos(yaw * URotationToRadians)
-    facing_y = math.cos(pitch * URotationToRadians) * math.sin(yaw * URotationToRadians)
+    facing_x = math.cos(pitch) * math.cos(yaw)
+    facing_y = math.cos(pitch) * math.sin(yaw)
 
     return Vector2(facing_x, facing_y)
