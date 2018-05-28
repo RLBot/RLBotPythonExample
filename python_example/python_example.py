@@ -1,7 +1,7 @@
 import math
 
-from RLBotFramework.agents.base_flatbuffer_agent import BaseFlatbufferAgent, SimpleControllerState
-from RLBotMessages.flat import GameTickPacket
+from rlbot.agents.base_flatbuffer_agent import BaseFlatbufferAgent, SimpleControllerState
+from rlbot.messages.flat import GameTickPacket
 
 URotationToRadians = math.pi / float(32768)
 
