@@ -1,23 +1,20 @@
 import math
 
-from rlbot.agents.base_flatbuffer_agent import BaseFlatbufferAgent, SimpleControllerState
-from rlbot.messages.flat import GameTickPacket
+from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
+from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 URotationToRadians = math.pi / float(32768)
 
 
-class PythonExample(BaseFlatbufferAgent):
+class PythonExample(BaseAgent):
 
     def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
         controller_state = SimpleControllerState()
 
-        if packet.Ball() is None:  # This happens during replays
-            return controller_state
+        ball_location = Vector2(packet.game_ball.physics.location.x, packet.game_ball.physics.location.y)
 
-        ball_location = Vector2(packet.Ball().Physics().Location().X(), packet.Ball().Physics().Location().Y())
-
-        my_car = packet.Players(self.index)
-        car_location = Vector2(my_car.Physics().Location().X(), my_car.Physics().Location().Y())
+        my_car = packet.game_cars[self.index]
+        car_location = Vector2(my_car.physics.location.x, my_car.physics.location.y)
         car_direction = get_car_facing_vector(my_car)
         car_to_ball = ball_location - car_location
 
@@ -64,8 +61,8 @@ class Vector2:
 
 
 def get_car_facing_vector(car):
-    pitch = car.Physics().Rotation().Pitch()
-    yaw = car.Physics().Rotation().Yaw()
+    pitch = float(car.physics.rotation.pitch)
+    yaw = float(car.physics.rotation.yaw)
 
     facing_x = math.cos(pitch) * math.cos(yaw)
     facing_y = math.cos(pitch) * math.sin(yaw)
