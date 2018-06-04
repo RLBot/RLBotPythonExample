@@ -8,7 +8,7 @@ URotationToRadians = math.pi / float(32768)
 
 class PythonExample(BaseAgent):
 
-    def get_output_vector(self, packet: GameTickPacket) -> SimpleControllerState:
+    def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
         controller_state = SimpleControllerState()
 
         ball_location = Vector2(packet.game_ball.physics.location.x,
