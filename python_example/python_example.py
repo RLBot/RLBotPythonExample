@@ -3,8 +3,6 @@ import math
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
-URotationToRadians = math.pi / float(32768)
-
 
 class PythonExample(BaseAgent):
 
