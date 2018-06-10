@@ -25,3 +25,5 @@ IF "!is_safe_to_upgrade!"=="True" (
 )
 
 python -c "from rlbot import runner; runner.main();"
+
+pause
