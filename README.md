@@ -20,3 +20,5 @@ https://www.youtube.com/watch?v=UjsQFNN0nSA
 
 - Bot behavior is controlled by `python_example/python_example.py`
 - Bot appearance is controlled by `python_example/appearance.cfg`
+
+See https://github.com/RLBot/RLBotPythonExample/wiki for documentation and tutorials.
