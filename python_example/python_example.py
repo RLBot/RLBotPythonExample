@@ -6,6 +6,9 @@ from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 class PythonExample(BaseAgent):
 
+    def __init__(self,name,team,index):
+        super().__init__(name,team,index)
+
     def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
         controller_state = SimpleControllerState()
 
