@@ -3,6 +3,9 @@
 @rem Change the working directory to the location of this file so that relative paths will work
 cd /D "%~dp0"
 
+@rem Make sure the environment variables are up-to-date. This is useful if the user installed python a moment ago.
+call ./RefreshEnv.cmd
+
 setlocal EnableDelayedExpansion
 
 @rem Run the is_safe_to_upgrade function and save the output to a temp file.
