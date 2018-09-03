@@ -22,7 +22,7 @@ del %temp%\is_safe_to_upgrade.txt
 
 IF "!is_safe_to_upgrade!"=="True" (
     @rem You will automatically get updates for all versions starting with "0.0.".
-    python -m pip install rlbot==0.0.* --upgrade
+    python -m pip install -r requirements.txt --upgrade
 ) ELSE (
     echo Will not attempt to upgrade rlbot because files are in use.
 )
