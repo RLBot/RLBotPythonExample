@@ -3,9 +3,12 @@ import math
 
 # This class should provide you with all the basic vector operations that you need
 # The vectors found in the GameTickPacket will be flatbuffer vectors. Cast them to Vec3 like this:
-# car_location = Vec3().set(car.physics.location)
+#
+#   car_location = Vec3().set(car.physics.location)
+#
 # Remember that the in-game axis are left-handed.
 # When in doubt visit: https://github.com/RLBot/RLBot/wiki/Useful-Game-Values
+# If you ever want to have a more sophisticated vector, take a look a chip's utility repository: https://github.com/samuelpmish/RLUtilities
 class Vec3:
     def __init__(self, x: float=0, y: float=0, z: float=0):
         self.x = float(x)
