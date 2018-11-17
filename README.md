@@ -41,7 +41,7 @@ _The guidelines are WIP._
 * One "policy" folder that contains the algorithm that choses between the states
 * One "utils" folder that contains tools used by the bot in action.
 * One "test" folder that contains:
-  * One configuration file to test the bot (this will have a selector for the state).
+  * One configuration file to test the bot (this will have a selector for the action and environment).
   * One "environements" folder that contains testing environments
   * One "utils" folder that contains tools used by the bot while testing.
 
