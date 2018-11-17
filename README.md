@@ -17,6 +17,9 @@ _The guidelines are WIP._
 
 * Don't work on someone else's code without permission, or it might not be merged.
 * Issues can be worked on by everyone, but don't doublecommit.
+* Use the issues feature in github as a todo list (and for issues).
+* Discuss decisions on discord via dm, or when everybody should be involved in the RLBot server (please use the correct channel, #strategy-discussion for strategy discussion etc.).
+* Use a pull-request to ask others for feedback on your work (feedback can be given on github).
 
 
 ### Programming guidelines
