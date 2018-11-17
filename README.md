@@ -28,41 +28,42 @@ _The guidelines are WIP._
 
 ## Working plan
 
-* Build different states that do a specific thing.
-* Build a testing environment (using state setting) to test these states.
-* When we are happy with a state it can be used by the state machine.
-* Build a state machine or planning algorithm (this part of the plan needs work).
+* Build different actions that do a specific thing.
+* Build a testing environment (using state setting) to test these actions.
+* When we are happy with an action it can be used by the policy.
+* Build a policy (this part of the plan needs work).
 
 
 ### Project structure
 
 * One configuration file to run the bot.
-* One "states" folder that contains the states. (a single state should not require more than one file)
-* One "planner" folder that contains the algorithm that choses between the states
+* One "actions" folder that contains the actions. (a single action should not require more than one file)
+* One "policy" folder that contains the algorithm that choses between the states
 * One "utils" folder that contains tools used by the bot in action.
 * One "test" folder that contains:
   * One configuration file to test the bot (this will have a selector for the state).
+  * One "environements" folder that contains testing environments
   * One "utils" folder that contains tools used by the bot while testing.
 
 
 
 ## Defenition of concepts
 
-### States
-States are the lowest level of actions that the planning algorithm can chose from.
+### Actions
+Actions are what the policy can chose from.
 Examples are:
 * Drive to own goal
 * Shoot ball toward opponent goal
 * Dribble ball away from the opponent
 * Pass ball to teammate
-These states should have no parameters.
-States should not contain too much strategy (when in doubt ask).
+These actions should have no parameters.
+Actions should not contain too much strategy (when in doubt ask).
 
 ### Controller
 This is a class that takes some arguments and creates a controller_state.
 Controllers should have no strategy at all.
 RLBotUtils are in this category.
 
-### State machine/ planning algorithm
+### Policy
 This is the part of the bot that contains most of the strategy.
 The exact algorithm used is to be discussed.
