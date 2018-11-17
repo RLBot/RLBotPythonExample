@@ -1,6 +1,7 @@
 # DisasterBot
 
 ExampleBot documentation here: https://github.com/RLBot/RLBotPythonExample/blob/master/README.md
+
 RLBot discord here: https://discord.gg/2prRFJ7
 
 ## Guidelines
