@@ -27,7 +27,7 @@ _The guidelines are WIP._
 ### Programming guidelines
 
 * The bot should be completely modular e.g. every state, controller, planner should have it's own file and use inheritance.
-* Python code should be according to PEP 8.
+* Python code should be according to [PEP 8](https://www.python.org/dev/peps/pep-0008/).
 
 
 
