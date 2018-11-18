@@ -22,10 +22,9 @@ def install_and_import(package):
 if __name__ == '__main__':
     install_and_import('rlbot')
     from rlbot.utils import public_utils, logging_utils
-    import logging
     logger = logging_utils.get_logger(DEFAULT_LOGGER)
     if not public_utils.have_internet():
-        logger.log(logging.INFO, 'Skipping upgrade check for now since it looks like you have no internet')
+        logger.log(logging_utils.logging_level, 'Skipping upgrade check for now since it looks like you have no internet')
     elif public_utils.is_safe_to_upgrade():
         pipmain(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
 
