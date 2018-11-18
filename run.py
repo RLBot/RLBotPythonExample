@@ -3,11 +3,9 @@ try:
     from pip import main as pipmain
 except ImportError:
     from pip._internal import main as pipmain
-try:
-    import httplib
-except:
-    import http.client as httplib
 
+
+DEFAULT_LOGGER = 'rlbot'
 
 # https://stackoverflow.com/a/24773951
 def install_and_import(package):
@@ -21,24 +19,13 @@ def install_and_import(package):
         globals()[package] = importlib.import_module(package)
 
 
-# https://stackoverflow.com/questions/3764291/checking-network-connection
-def have_internet():
-    conn = httplib.HTTPConnection("www.google.com", timeout=5)
-    try:
-        conn.request("HEAD", "/")
-        return True
-    except:
-        return False
-    finally:
-        conn.close()
-
-
 if __name__ == '__main__':
     install_and_import('rlbot')
-    from rlbot.utils import public_utils
-
-    if not have_internet():
-        print('NewConnectionError: unable to connect to install requirements.')  
+    from rlbot.utils import public_utils, logging_utils
+    import logging
+    logger = logging_utils.get_logger(DEFAULT_LOGGER)
+    if not public_utils.have_internet():
+        logger.log(logging.INFO, 'Skipping upgrade check for now since it looks like you have no internet')
     elif public_utils.is_safe_to_upgrade():
         pipmain(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
 
