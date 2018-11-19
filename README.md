@@ -42,12 +42,12 @@ _The guidelines are WIP._
 ### Project structure
 
 * One configuration file to run the bot.
-* One "actions" folder that contains the actions. (a single action should not require more than one file)
+* One "action" folder that contains the actions. (a single action should not require more than one file)
 * One "policy" folder that contains the algorithm that choses between the states
 * One "utils" folder that contains tools used by the bot in action.
 * One "test" folder that contains:
   * One configuration file to test the bot (this will have a selector for the action and environment).
-  * One "environments" folder that contains testing environments
+  * One "environment" folder that contains testing environments
   * One "utils" folder that contains tools used by the bot while testing.
 
 
