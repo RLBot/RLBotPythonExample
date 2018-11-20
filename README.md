@@ -42,13 +42,15 @@ _The guidelines are WIP._
 ### Project structure
 
 * One configuration file to run the bot.
-* One "action" folder that contains the actions. (a single action should not require more than one file)
+* One "action" folder that contains the actions. (see the decription below)
 * One "policy" folder that contains the algorithm that choses between the states
-* One "utils" folder that contains tools used by the bot in action.
-* One "test" folder that contains:
-  * One configuration file to test the bot (this will have a selector for the action and environment).
-  * One "environment" folder that contains testing environments
-  * One "utils" folder that contains tools used by the bot while testing.
+* One "utils" folder that contains tools used by the bot.
+
+#### Action folder
+* One folder for each action that contains:
+  * Two configuration files (test_agent.cgf and rlbot.cfg)
+  * One python file that contains testing environments
+  * One python file that contains the action
 
 
 
