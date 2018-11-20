@@ -15,11 +15,6 @@ class TouchInfo:
 
 
 class Kickoff(BaseAction):
-
-    def __init__(self, renderer):
-        self.controls = SimpleControllerState()
-        self.renderer = renderer
-
     def get_output(self, info: GameInfo) -> SimpleControllerState:
 
         ball = info.ball
