@@ -4,31 +4,40 @@ ExampleBot documentation here: https://github.com/RLBot/RLBotPythonExample/blob/
 
 RLBot discord here: https://discord.gg/2prRFJ7
 
+RLUtilities here: https://github.com/samuelpmish/RLUtilities
+
 ## Guidelines
 _The guidelines are WIP._
 
 ### Contribution guidelines
 
-* Everyone who is not a collaborator should make a pull request for their changes.
 * Documentation can be changed on the master branch.
 * All other files should never be modified on the master branch in order to keep the bot stable.
-* After testing changes and approval from the other collaborators a branch can be merged into master.
+* Use the issues feature in github as a todo list (and for issues).
 
 
 ### Teamwork guidelines
 
-* Don't work on someone else's code without permission, or it might not be merged.
+* Don't work on someone else's code without permission, because your pull-request may not be merged.
 * Issues can be worked on by everyone, but don't doublecommit.
-* Use the issues feature in github as a todo list (and for issues).
-* Discuss decisions on discord via dm, or when everybody should be involved in the RLBot server (please use the correct channel, #strategy-discussion for strategy discussion etc.).
+  * To make sure something is not being worked on, ask in discord.
+  * When you start with something, tell us in discord or assign yourself to the issue.
 * Use a pull-request to ask others for feedback on your work (feedback can be given on github).
+  * After testing changes and approval from the other collaborators a branch can be merged into master.
 
 
-### Programming guidelines
+### Discussion guidelines
+
+* Discuss small decisions on discord via dm.
+* Discuss important decisions in the RLBot server.
+  * You can also ask for help in this server.
+  * Please use the correct channel, #strategy-discussion for strategy discussion etc.
+
+
+### Programming goals
 
 * The bot should be completely modular e.g. every state, controller, planner should have it's own file and use inheritance.
 * Python code should be according to [PEP 8](https://www.python.org/dev/peps/pep-0008/).
-
 
 
 ## Working plan
@@ -49,9 +58,10 @@ _The guidelines are WIP._
 #### Action folder
 * One folder for each action that contains:
   * Two configuration files (test_agent.cgf and rlbot.cfg)
-  * One python file that contains testing environments
+  * One python file that contains a bot to test the action
   * One python file that contains the action
-  * One run.bat to test the action
+  * One run.bat or run.py to test the action
+
 
 
 ## Definition of concepts
