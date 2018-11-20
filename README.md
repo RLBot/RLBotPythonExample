@@ -51,7 +51,7 @@ _The guidelines are WIP._
   * Two configuration files (test_agent.cgf and rlbot.cfg)
   * One python file that contains testing environments
   * One python file that contains the action
-
+  * One run.bat to test the action
 
 
 ## Definition of concepts
