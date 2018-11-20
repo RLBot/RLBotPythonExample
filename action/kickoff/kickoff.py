@@ -1,16 +1,12 @@
-
-
 import math
 
-from .base_action import BaseAction
+from action.base_action import BaseAction
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 from RLUtilities.GameInfo import GameInfo
 from RLUtilities.Simulation import Car, Ball
 from RLUtilities.LinearAlgebra import vec3, dot, clip
-
-from RLUtilities.controller_input import controller
 
 
 class TouchInfo:
@@ -29,9 +25,9 @@ class Kickoff(BaseAction):
         ball = info.ball
         car = info.my_car
 
-        steer_left = dot(ball.pos - car.pos, car.theta[1])
+        local_coords = dot(ball.pos - car.pos, car.theta)
 
-        self.controls.steer = math.copysign(steer_left, 1.0)
+        self.controls.steer = math.copysign(1.0, local_coords[1])
 
         # just set the throttle to 1 so the car is always moving forward
         self.controls.throttle = 1.0

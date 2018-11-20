@@ -30,6 +30,11 @@ if __name__ == '__main__':
 
     try:
         import sys
+        import os
+
+        path = os.path.dirname(os.path.abspath(__file__))
+        sys.path.insert(0, path)  # this is for first process imports
+
         if len(sys.argv) > 1 and sys.argv[1] == 'gui':
             from rlbot.gui.qt_root import RLBotQTGui
             RLBotQTGui.main()
