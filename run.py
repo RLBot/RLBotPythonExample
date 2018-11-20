@@ -19,7 +19,7 @@ def install_and_import(package):
         globals()[package] = importlib.import_module(package)
 
 
-if __name__ == '__main__':
+def main():
     install_and_import('rlbot')
     from rlbot.utils import public_utils, logging_utils
     logger = logging_utils.get_logger(DEFAULT_LOGGER)
@@ -45,3 +45,7 @@ if __name__ == '__main__':
         print("Encountered exception: ", e)
         print("Press enter to close.")
         input()
+
+
+if __name__ == '__main__':
+    main()
