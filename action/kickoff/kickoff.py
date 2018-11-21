@@ -26,7 +26,7 @@ class Kickoff(BaseAction):
     def get_possible(self, info: GameInfo):
         return True
 
-    def update_status(self, info: GameInfo) -> bool:
+    def update_status(self, info: GameInfo):
 
         if norm(info.ball.pos) > 140 and norm(info.ball.vel) > 9:  # this only works for soccar
 
