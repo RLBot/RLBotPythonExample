@@ -13,8 +13,10 @@ class TestAgent(BaseTestAgent):
     timeout = 5
 
     def test_process(self, game_tick_packet: GameTickPacket):
-        if self.info.time > self.initialization_time + self.timeout:
+        self.action.update_status(self.info)
+        if self.info.time > self.initialization_time + self.timeout or self.action.finished or self.action.failed:
             self.initialize_agent()
+            self.action.reset_status()
 
     def initialize_agent(self):
         m = -1 if self.team else 1
