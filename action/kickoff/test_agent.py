@@ -14,7 +14,13 @@ class TestAgent(BaseTestAgent):
 
     def test_process(self, game_tick_packet: GameTickPacket):
         self.action.update_status(self.info)
+
         if self.info.time > self.initialization_time + self.timeout or self.action.finished or self.action.failed:
+
+            log_message = "Finished" if self.action.finished else "Failed" if self.action.failed else "Timed out"
+            log_message = log_message + ". Took " + str(self.info.time - self.initialization_time) + " Seconds."
+            self.logger.info(log_message)
+
             self.initialize_agent()
 
     def initialize_agent(self):
@@ -40,7 +46,6 @@ class TestAgent(BaseTestAgent):
         self.set_game_state(game_state)
 
         self.initialization_time = self.info.time
-
         self.action.reset_status()
 
     def create_action(self):
