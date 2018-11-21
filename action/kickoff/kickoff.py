@@ -42,7 +42,3 @@ class Kickoff(BaseAction):
                 self.finished = True
             else:
                 self.failed = True
-
-    def reset_status(self):
-        self.finished = False
-        self.failed = False

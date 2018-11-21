@@ -19,4 +19,5 @@ class BaseAction:
         raise NotImplementedError
 
     def reset_status(self):
-        raise NotImplementedError
+        self.finished = False
+        self.failed = False
