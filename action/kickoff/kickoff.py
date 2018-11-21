@@ -1,12 +1,11 @@
 import math
 
 from action.base_action import BaseAction
-from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
-from rlbot.utils.structures.game_data_struct import GameTickPacket
+from rlbot.agents.base_agent import SimpleControllerState
 
 from RLUtilities.GameInfo import GameInfo
 from RLUtilities.Simulation import Car, Ball
-from RLUtilities.LinearAlgebra import vec3, dot, clip
+from RLUtilities.LinearAlgebra import vec3, dot, clip, norm
 
 
 class TouchInfo:
@@ -34,3 +33,12 @@ class Kickoff(BaseAction):
 
     def get_car_at_time(self, info: GameInfo, time: float) -> Car:
         return Car()
+
+    def update_status(self, info: GameInfo) -> bool:
+
+        if norm(info.ball.pos) > 140 and norm(info.ball.vel) > 9:  # this only works for soccar
+
+            if norm(info.ball.pos - info.my_car.pos) < 240:
+                self.finished = True
+            else:
+                self.failed = True
