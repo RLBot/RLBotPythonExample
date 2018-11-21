@@ -9,11 +9,6 @@ from RLUtilities.Simulation import Car, Ball
 from RLUtilities.LinearAlgebra import vec3, dot, clip
 
 
-class TouchInfo:
-    ball = Ball()
-    time = -1
-
-
 class Kickoff(BaseAction):
     def get_output(self, info: GameInfo) -> SimpleControllerState:
 
@@ -29,8 +24,5 @@ class Kickoff(BaseAction):
 
         return self.controls
 
-    def get_next_touch(self, info: GameInfo) -> TouchInfo:
-        return TouchInfo()
-
-    def get_car_at_time(self, info: GameInfo, time: float) -> Car:
-        return Car()
+    def get_possible(self, info: GameInfo):
+        return True
