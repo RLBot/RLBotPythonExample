@@ -1,6 +1,6 @@
 from action.base_test_agent import BaseTestAgent
 from action.kickoff.kickoff import Kickoff
-from rlbot.utils.game_state_util import GameState, BallState, CarState, Physics, Vector3, Rotator, BoostState
+from rlbot.utils.game_state_util import GameState, BallState, CarState, Physics, Vector3, Rotator
 from rlbot.utils.structures.game_data_struct import GameTickPacket, FieldInfoPacket
 
 import math
@@ -13,7 +13,8 @@ class TestAgent(BaseTestAgent):
     timeout = 5
 
     def test_process(self, game_tick_packet: GameTickPacket):
-        if self.info.time > self.initialization_time + self.timeout:
+        self.action.update_status(self.info)
+        if self.info.time > self.initialization_time + self.timeout or self.action.finished or self.action.failed:
             self.initialize_agent()
 
     def initialize_agent(self):
@@ -39,6 +40,8 @@ class TestAgent(BaseTestAgent):
         self.set_game_state(game_state)
 
         self.initialization_time = self.info.time
+
+        self.action.reset_status()
 
     def create_action(self):
         return Kickoff(self.renderer)
