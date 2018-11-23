@@ -9,10 +9,15 @@ from RLUtilities.LinearAlgebra import vec3
 
 
 class CollectBoost(BaseAction):
+
     def get_output(self, info: GameInfo) -> SimpleControllerState:
 
         car = info.my_car
         boost_pad = closest_available_boost(car.pos, info.boost_pads)
+
+        if boost_pad is None:
+            # All boost pads are inactive.
+            return self.controls
 
         self.action = Drive(car, boost_pad.pos, 2310)
 

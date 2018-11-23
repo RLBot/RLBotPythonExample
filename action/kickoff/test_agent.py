@@ -35,7 +35,7 @@ class TestAgent(BaseTestAgent):
 
         ball_physics = Physics(location=Vector3(0, 0, 92.739998),
                                velocity=Vector3(0, 0, 0),
-                               angular_velocity=Vector3(0, 0, 0),)
+                               angular_velocity=Vector3(0, 0, 0))
 
         car_state = CarState(jumped=False, double_jumped=False, boost_amount=34, physics=car_physics)
 
