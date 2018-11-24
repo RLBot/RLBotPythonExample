@@ -1,7 +1,7 @@
 from action.base_test_agent import BaseTestAgent
 from action.kickoff.kickoff import Kickoff
 from rlbot.utils.game_state_util import GameState, BallState, CarState, Physics, Vector3, Rotator
-from rlbot.utils.structures.game_data_struct import GameTickPacket, FieldInfoPacket
+from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 import math
 

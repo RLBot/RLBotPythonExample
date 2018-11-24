@@ -9,13 +9,17 @@ class BaseTestAgent(BaseAgent):
     def __init__(self, name, team, index):
         super(BaseTestAgent, self).__init__(name, team, index)
         self.info = GameInfo(index, team)
+        self.mechanic = self.create_mechanic()
 
     def get_output(self, game_tick_packet: GameTickPacket) -> SimpleControllerState:
         self.info.read_packet(game_tick_packet)
         self.test_process(game_tick_packet)
         return self.get_mechanic_controls()
 
-    def get_mechanic_controls(self) -> BaseMechanic:
+    def create_mechanic(self) -> BaseMechanic:
+        raise NotImplementedError
+
+    def get_mechanic_controls(self) -> SimpleControllerState:
         raise NotImplementedError
 
     def test_process(self, game_tick_packet: GameTickPacket):

@@ -3,6 +3,7 @@ from RLUtilities.GameInfo import GameInfo
 
 
 class BaseAction:
+
     def __init__(self, renderer):
         self.controls = SimpleControllerState()
         self.renderer = renderer

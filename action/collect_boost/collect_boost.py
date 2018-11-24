@@ -3,9 +3,7 @@ from util.boost_utils import closest_available_boost
 from rlbot.agents.base_agent import SimpleControllerState
 
 from RLUtilities.Maneuvers import Drive
-from RLUtilities.GameInfo import GameInfo, BoostPad
-from RLUtilities.Simulation import Car, Ball
-from RLUtilities.LinearAlgebra import vec3
+from RLUtilities.GameInfo import GameInfo
 
 
 class CollectBoost(BaseAction):

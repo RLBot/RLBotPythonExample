@@ -5,6 +5,7 @@ class BaseMechanic:
 
     def __init__(self):
         self.controls = SimpleControllerState()
+        self.finished = False
 
-    def step(self, dt: float = 0.1667) -> SimpleControllerState:
+    def step(self) -> SimpleControllerState:
         raise NotImplementedError
