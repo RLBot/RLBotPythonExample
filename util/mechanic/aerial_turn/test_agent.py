@@ -1,5 +1,5 @@
 from util.mechanic.base_test_agent import BaseTestAgent
-from util.mechanic.aerial_turn.face_vector import FaceVectorRLU, FaceVectorPD
+from util.mechanic.aerial_turn.face_vector import FaceVectorRLU
 from rlbot.utils.game_state_util import GameState, CarState, BallState, Physics, Vector3, Rotator
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
@@ -14,7 +14,6 @@ class TestAgent(BaseTestAgent):
     timeout = 2.5
 
     def create_mechanic(self):
-        # return FaceVectorPD()
         return FaceVectorRLU()
 
     def test_process(self, game_tick_packet: GameTickPacket):
