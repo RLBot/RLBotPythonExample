@@ -1,22 +1,25 @@
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 from RLUtilities.GameInfo import GameInfo
-from .base_action import BaseAction
+from .base_mechanic import BaseMechanic
 
 
 class BaseTestAgent(BaseAgent):
 
     def __init__(self, name, team, index):
         super(BaseTestAgent, self).__init__(name, team, index)
-        self.action = self.create_action()
         self.info = GameInfo(index, team)
+        self.mechanic = self.create_mechanic()
 
     def get_output(self, game_tick_packet: GameTickPacket) -> SimpleControllerState:
         self.info.read_packet(game_tick_packet)
         self.test_process(game_tick_packet)
-        return self.action.get_output(self.info)
+        return self.get_mechanic_controls()
 
-    def create_action(self) -> BaseAction:
+    def create_mechanic(self) -> BaseMechanic:
+        raise NotImplementedError
+
+    def get_mechanic_controls(self) -> SimpleControllerState:
         raise NotImplementedError
 
     def test_process(self, game_tick_packet: GameTickPacket):

@@ -4,11 +4,11 @@ from action.base_action import BaseAction
 from rlbot.agents.base_agent import SimpleControllerState
 
 from RLUtilities.GameInfo import GameInfo
-from RLUtilities.Simulation import Car, Ball
-from RLUtilities.LinearAlgebra import vec3, dot, clip, norm
+from RLUtilities.LinearAlgebra import dot, norm
 
 
 class Kickoff(BaseAction):
+
     def get_output(self, info: GameInfo) -> SimpleControllerState:
 
         ball = info.ball

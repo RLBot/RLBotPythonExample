@@ -1,7 +1,7 @@
 from action.base_test_agent import BaseTestAgent
 from action.kickoff.kickoff import Kickoff
 from rlbot.utils.game_state_util import GameState, BallState, CarState, Physics, Vector3, Rotator
-from rlbot.utils.structures.game_data_struct import GameTickPacket, FieldInfoPacket
+from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 import math
 
@@ -35,7 +35,7 @@ class TestAgent(BaseTestAgent):
 
         ball_physics = Physics(location=Vector3(0, 0, 92.739998),
                                velocity=Vector3(0, 0, 0),
-                               angular_velocity=Vector3(0, 0, 0),)
+                               angular_velocity=Vector3(0, 0, 0))
 
         car_state = CarState(jumped=False, double_jumped=False, boost_amount=34, physics=car_physics)
 
