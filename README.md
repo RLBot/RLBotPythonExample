@@ -1,4 +1,4 @@
-# DisasterBot
+# DisasterBot (WIP)
 
 ExampleBot documentation here: https://github.com/RLBot/RLBotPythonExample/blob/master/README.md
 
@@ -49,6 +49,7 @@ _The guidelines are WIP._
 
 
 ### Project structure
+_The project structure is WIP._
 
 * One configuration file to run the bot.
 * One "action" folder that contains the actions. (see the decription below)
