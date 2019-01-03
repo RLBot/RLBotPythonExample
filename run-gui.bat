@@ -7,3 +7,5 @@ cd /D "%~dp0"
 call ./RefreshEnv.cmd
 
 python run.py gui
+
+pause
