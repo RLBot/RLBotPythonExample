@@ -5,7 +5,7 @@ from rlbottraining.exercise_runner import run_playlist
 
 from hello_world_training import StrikerPatience
 
-class CommonExercisesTest(unittest.TestCase):
+class PatienceTest(unittest.TestCase):
     def test_patience_required(self):
         result_iter = run_playlist([StrikerPatience(name='patience required')])
         results = list(result_iter)

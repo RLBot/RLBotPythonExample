@@ -8,12 +8,15 @@ from rlbottraining.common_exercises.common_base_exercises import StrikerExercise
 from rlbottraining.rng import SeededRandomNumberGenerator
 from rlbottraining.match_configs import make_empty_match_config
 from rlbottraining.grading.grader import Grader
-from rlbottraining.training_exercise import TrainingExercise
+from rlbottraining.training_exercise import TrainingExercise, Playlist
 
 import training_util
 from drive_to_ball_grader import DriveToBallGrader
 
+
 def make_match_config_with_my_bot() -> MatchConfig:
+    # Makes a config which only has our bot in it for now.
+    # For more defails: https://youtu.be/uGFmOZCpel8?t=375
     match_config = make_empty_match_config()
     match_config.player_configs = [
         PlayerConfig.bot_config(
@@ -25,6 +28,11 @@ def make_match_config_with_my_bot() -> MatchConfig:
 
 @dataclass
 class StrikerPatience(StrikerExercise):
+    """
+    Drops the ball from a certain height, requiring the bot to not drive
+    underneath the ball until it's in reach.
+    """
+
     car_start_x: float = 0
 
     def make_game_state(self, rng: SeededRandomNumberGenerator) -> GameState:
@@ -49,6 +57,9 @@ class StrikerPatience(StrikerExercise):
 
 @dataclass
 class DrivesToBallExercise(TrainingExercise):
+    """
+    Checks that we drive to the ball when it's in the center of the field.
+    """
     grader: Grader = field(default_factory=DriveToBallGrader)
 
     def make_game_state(self, rng: SeededRandomNumberGenerator) -> GameState:
@@ -72,7 +83,7 @@ class DrivesToBallExercise(TrainingExercise):
         )
 
 
-def make_default_playlist():
+def make_default_playlist() -> Playlist:
     exercises = [
         StrikerPatience('start perfectly center'),
         StrikerPatience('start on the right', car_start_x=-1000),
