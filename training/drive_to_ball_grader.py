@@ -33,8 +33,10 @@ class PassOnNearBall(Grader):
     """
 
     min_dist_to_pass: float = 200
+    car_index: int = 0
+
     def on_tick(self, tick: TrainingTickPacket) -> Optional[Grade]:
-        car = tick.game_tick_packet.game_cars[0].physics.location
+        car = tick.game_tick_packet.game_cars[self.car_index].physics.location
         ball = tick.game_tick_packet.game_ball.physics.location
 
         dist = sqrt(
