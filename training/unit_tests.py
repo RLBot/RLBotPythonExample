@@ -8,7 +8,7 @@ from hello_world_training import StrikerPatience
 class PatienceTest(unittest.TestCase):
     """
     These units check that this bot behaves as we expect,
-    with regards to the StrikerPatience excercise.
+    with regards to the StrikerPatience exercise.
 
     By default, the bot isn't very smart so it'll fail in the cases where
     patience is required but passes in cases where no patience is required.

@@ -9,7 +9,17 @@ from rlbottraining.common_graders.timeout import FailOnTimeout
 from rlbottraining.common_graders.compound_grader import CompoundGrader
 from rlbottraining.grading.grader import Grader
 
+
+"""
+This file shows how to create Graders which specify when the Exercises finish
+and whether the bots passed the exercise.
+"""
+
+
 class DriveToBallGrader(CompoundGrader):
+    """
+    Checks that the car gets to the ball in a reasonable amount of time.
+    """
     def __init__(self, timeout_seconds=4.0, min_dist_to_pass=200):
         super().__init__([
             PassOnNearBall(min_dist_to_pass=min_dist_to_pass),
@@ -18,6 +28,10 @@ class DriveToBallGrader(CompoundGrader):
 
 @dataclass
 class PassOnNearBall(Grader):
+    """
+    Returns a Pass grade once the car is sufficiently close to the ball.
+    """
+
     min_dist_to_pass: float = 200
     def on_tick(self, tick: TrainingTickPacket) -> Optional[Grade]:
         car = tick.game_tick_packet.game_cars[0].physics.location
