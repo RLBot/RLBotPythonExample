@@ -9,7 +9,7 @@ https://www.youtube.com/watch?v=UjsQFNN0nSA
 
 ### Plain instructions
 
-1. Make sure you've installed [Python 3.7](https://www.python.org/ftp/python/3.7.1/python-3.7.1-amd64.exe) or [Python 3.6 64 bit](https://www.python.org/ftp/python/3.6.5/python-3.6.5-amd64.exe) (deprecated). During installation:
+1. Make sure you've installed [Python 3.7](https://www.python.org/ftp/python/3.7.2/python-3.7.2-amd64.exe). During installation:
    - Select "Add Python to PATH"
    - Make sure pip is included in the installation
 2. Open Rocket League
