@@ -12,7 +12,6 @@ https://www.youtube.com/watch?v=UjsQFNN0nSA
 1. Make sure you've installed [Python 3.7 64 bit](https://www.python.org/downloads/). During installation:
    - Select "Add Python to PATH"
    - Make sure pip is included in the installation
-2. Open Rocket League
 3. Download or clone this repository
 3. In the files from the previous step, find and double click on run-gui.bat
 4. Click the 'Run' button
