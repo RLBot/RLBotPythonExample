@@ -14,7 +14,7 @@ class Vec3:
     When in doubt visit the wiki: https://github.com/RLBot/RLBot/wiki/Useful-Game-Values
     """
 
-    def __init__(self, x: float=0, y: float=0, z: float=0):
+    def __init__(self, x: float or 'Vec3'=0, y: float=0, z: float=0):
         """
         Create a new Vec3. The x component can alternatively be another vector with an x, y, and z component, in which
         case the created vector is a copy of the given vector and the y and z parameter is ignored. Examples:
