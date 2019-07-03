@@ -35,6 +35,9 @@ class Vec3:
             self.y = float(y)
             self.z = float(z)
 
+    def __getitem__(self, item: int):
+        return (self.x, self.y, self.z)[item]
+
     def __add__(self, other: 'Vec3') -> 'Vec3':
         return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
 

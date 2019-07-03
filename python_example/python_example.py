@@ -38,7 +38,7 @@ class PythonExample(BaseAgent):
         self.controller_state.throttle = 1.0
         self.controller_state.steer = turn
 
-        draw_debug(self.renderer, my_car, packet.game_ball, action_display)
+        draw_debug(self.renderer, my_car, ball_location, action_display)
 
         return self.controller_state
 
@@ -65,7 +65,7 @@ def find_correction(current: Vec3, ideal: Vec3) -> float:
 def draw_debug(renderer, car, ball, action_display):
     renderer.begin_rendering()
     # draw a line from the car to the ball
-    renderer.draw_line_3d(car.physics.location, ball.physics.location, renderer.white())
+    renderer.draw_line_3d(car.physics.location, ball, renderer.white())
     # print the action that the bot is taking
     renderer.draw_string_3d(car.physics.location, 2, 2, action_display, renderer.white())
     renderer.end_rendering()
