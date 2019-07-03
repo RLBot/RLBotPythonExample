@@ -15,6 +15,16 @@ class Vec3:
     """
 
     def __init__(self, x: float=0, y: float=0, z: float=0):
+        """
+        Create a new Vec3. The x component can alternatively be another vector with an x, y, and z component, in which
+        case the created vector is a copy of the given vector and the y and z parameter is ignored. Examples:
+
+        a = Vec3(1, 2, 3)
+
+        b = Vec3(a)
+
+        """
+
         if hasattr(x, 'x'):
             # We have been given a vector. Copy it
             self.x = float(x.x)
@@ -52,7 +62,7 @@ class Vec3:
         return Vec3(self.x, self.y, 0)
 
     def length(self):
-        """Returns the length of the vector."""
+        """Returns the length of the vector. Also called magnitude and norm."""
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def dist(self, other):

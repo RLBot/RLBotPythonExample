@@ -43,7 +43,7 @@ class PythonExample(BaseAgent):
         return self.controller_state
 
 
-def find_correction(current: Vec3, ideal: Vec3):
+def find_correction(current: Vec3, ideal: Vec3) -> float:
     # Finds the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
 
     # The in-game axes are left handed, so use -x
