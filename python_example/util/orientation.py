@@ -3,6 +3,7 @@ import math
 from util.vec import Vec3
 
 
+# This is a helper class for calculating directions relative to your car. You can extend it or delete if you want.
 class Orientation:
     """
     This class describes the orientation of an object from the rotation of the object.

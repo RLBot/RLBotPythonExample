@@ -1,9 +1,11 @@
 import math
 
 
+# This is a helper class for vector math. You can extend it or delete if you want.
 class Vec3:
     """
-    This class should provide you with all the basic vector operations that you need.
+    This class should provide you with all the basic vector operations that you need, but feel free to extend its
+    functionality when needed.
     The vectors found in the GameTickPacket will be flatbuffer vectors. Cast them to Vec3 like this:
     `car_location = Vec3(car.physics.location)`.
 
