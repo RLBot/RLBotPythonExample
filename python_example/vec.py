@@ -1,15 +1,17 @@
 import math
 
 
-# This class should provide you with all the basic vector operations that you need
-# The vectors found in the GameTickPacket will be flatbuffer vectors. Cast them to Vec3 like this:
-#
-#   car_location = Vec3(car.physics.location)
-#
-# Remember that the in-game axis are left-handed.
-# When in doubt visit: https://github.com/RLBot/RLBot/wiki/Useful-Game-Values
-# If you ever want to have a more sophisticated vector, take a look a chip's utility repository: https://github.com/samuelpmish/RLUtilities
 class Vec3:
+    """
+    This class should provide you with all the basic vector operations that you need.
+    The vectors found in the GameTickPacket will be flatbuffer vectors. Cast them to Vec3 like this:
+    `car_location = Vec3(car.physics.location)`.
+
+    Remember that the in-game axis are left-handed.
+
+    When in doubt visit the wiki: https://github.com/RLBot/RLBot/wiki/Useful-Game-Values
+    """
+
     def __init__(self, x: float=0, y: float=0, z: float=0):
         if hasattr(x, 'x'):
             # We have been given a vector. Copy it
@@ -44,15 +46,11 @@ class Vec3:
         return "Vec3(" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + ")"
 
     def flat(self):
-        """Returns a new Vec3 that equals this Vec3 but projected onto the ground plane."""
+        """Returns a new Vec3 that equals this Vec3 but projected onto the ground plane. I.e. where z=0."""
         return Vec3(self.x, self.y, 0)
 
     def length(self):
         """Returns the length of the vector."""
-        return self.magnitude()
-
-    def magnitude(self):
-        """Returns the magnitude of the vector."""
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def dist(self, other):
@@ -83,19 +81,3 @@ class Vec3:
         """Returns the angle to the ideal vector. Angle will be between 0 and pi."""
         cos_ang = self.dot(ideal) / (self.length() * ideal.length())
         return math.acos(cos_ang)
-
-    def ang_to_2d(self, ideal):
-        """Returns the angle to the ideal vector in the xy-plane. Angle will be between -pi and +pi."""
-        current_in_radians = math.atan2(self.y, self.x)
-        ideal_in_radians = math.atan2(ideal.y, ideal.x)
-
-        diff = ideal_in_radians - current_in_radians
-
-        # make sure that diff is between -pi and +pi.
-        if abs(diff) > math.pi:
-            if diff < 0:
-                diff += 2 * math.pi
-            else:
-                diff -= 2 * math.pi
-
-        return diff
