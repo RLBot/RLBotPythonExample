@@ -3,8 +3,8 @@ import math
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
-from orientation import Orientation
-from vec import Vec3
+from util.orientation import Orientation
+from util.vec import Vec3
 
 
 class PythonExample(BaseAgent):
@@ -44,9 +44,8 @@ class PythonExample(BaseAgent):
 
 
 def find_correction(current: Vec3, ideal: Vec3):
-    """
-    Returns the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
-    """
+    # Finds the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
+
     # The in-game axes are left handed, so use -x
     current_in_radians = math.atan2(current.y, -current.x)
     ideal_in_radians = math.atan2(ideal.y, -ideal.x)

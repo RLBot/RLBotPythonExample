@@ -1,6 +1,6 @@
 import math
 
-from vec import Vec3
+from util.vec import Vec3
 
 
 class Orientation:
