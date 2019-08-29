@@ -20,7 +20,7 @@ def make_match_config_with_my_bot() -> MatchConfig:
     match_config = make_empty_match_config()
     match_config.player_configs = [
         PlayerConfig.bot_config(
-            Path(__file__).absolute().parent.parent / 'python_example' / 'python_example.cfg',
+            Path(__file__).absolute().parent.parent / 'src' / 'bot.cfg',
             Team.BLUE
         ),
     ]
