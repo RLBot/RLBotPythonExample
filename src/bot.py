@@ -7,7 +7,7 @@ from util.orientation import Orientation
 from util.vec import Vec3
 
 
-class PythonExample(BaseAgent):
+class MyBot(BaseAgent):
 
     def initialize_agent(self):
         # This runs once before the bot starts up
