@@ -11,8 +11,8 @@ It shows you how to:
 
 ## Changing the bot
 
-- Bot behavior is controlled by `python_example/python_example.py`
-- Bot appearance is controlled by `python_example/appearance.cfg`
+- Bot behavior is controlled by `src/bot.py`
+- Bot appearance is controlled by `src/appearance.cfg`
 
 See https://github.com/RLBot/RLBotPythonExample/wiki for documentation and tutorials.
 
