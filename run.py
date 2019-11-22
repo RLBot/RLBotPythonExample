@@ -6,6 +6,11 @@ try:
 except ImportError:
     from pip._internal import main as pipmain
 
+# More pip changes breaking us.
+main_fn = pipmain
+if hasattr(pipmain, 'main'):
+    main_fn = pipmain.main
+
 DEFAULT_LOGGER = 'rlbot'
 
 if __name__ == '__main__':
@@ -18,7 +23,7 @@ if __name__ == '__main__':
             logger.log(logging_utils.logging_level,
                        'Skipping upgrade check for now since it looks like you have no internet')
         elif public_utils.is_safe_to_upgrade():
-            pipmain.main(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
+            main_fn(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
 
             # https://stackoverflow.com/a/44401013
             rlbots = [module for module in sys.modules if module.startswith('rlbot')]
@@ -26,7 +31,7 @@ if __name__ == '__main__':
                 sys.modules.pop(rlbot_module)
 
     except ImportError:
-        pipmain.main(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
+        main_fn(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
 
     try:
         if len(sys.argv) > 1 and sys.argv[1] == 'gui':
