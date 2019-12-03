@@ -1,7 +1,4 @@
 # Include everything the framework requires
 # You will automatically get updates for all versions starting with "1.".
 rlbot==1.*
-rlbottraining
-
-# This will cause pip to auto-upgrade and stop scaring people with warning messages
-pip
+quicktracer
