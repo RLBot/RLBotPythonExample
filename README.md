@@ -8,7 +8,7 @@ These instructions assume that you're attending some kind of session where
 somebody is explaining RLBot and hosting the game on one main computer.
 
 1. Make sure you have python 3.6 or higher installed.
-1. Download this repository.
+1. Download this specific branch of the repository: https://github.com/RLBot/RLBotPythonExample/zipball/puppy. Make sure you unzip if necessary.
 1. Look in the rlbot.cfg file and make sure the `network_address`
 matches what the person hosting has provided.
 1. Look in the src/bot.cfg file and change the name "AnonymousBot" to something
