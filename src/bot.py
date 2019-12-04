@@ -1,6 +1,5 @@
 import math
 
-from quicktracer import trace
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
@@ -14,9 +13,6 @@ class MyBot(BaseAgent):
         my_car = packet.game_cars[self.index]
         car_location = Vec3(my_car.physics.location)
         ball_location = Vec3(packet.game_ball.physics.location)
-
-        # trace makes a pretty graph of whatever numeric variable you pass
-        trace(car_location.dist(ball_location))
 
         # Numbers taken from https://github.com/RLBot/RLBot/wiki/Useful-Game-Values
         enemy_goal_y_value = 5200 if my_car.team == 0 else -5200

@@ -109,3 +109,4 @@ ENV/
 
 # Gradle files
 /.gradle
+.vscode
