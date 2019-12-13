@@ -13,7 +13,6 @@ somebody is explaining RLBot and hosting the game on one main computer.
 matches what the person hosting has provided.
 1. Look in the src/bot.cfg file and change the name "AnonymousBot" to something
 you can recognize, so you'll know which car on the screen is yours.
-
 1. Run the program. This should cause a car to appear in the game on the host computer!
    - Windows: Double click on run.bat
    - Mac / Linux: Open a terminal at this folder location and run `python3 run.py`
