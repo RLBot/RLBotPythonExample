@@ -1,7 +1,7 @@
 import math
 
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
-from rlbot.utils.structures.game_data_struct import GameTickPacket
+from rlbot.utils.structures.game_data_struct_autocomplete import GameTickPacket
 
 from util.orientation import Orientation
 from util.vec import Vec3
