@@ -120,20 +120,19 @@ class BoostPad:
 
 # FUNCTIONS FOR CONVERTION TO NUMPY ARRAYS:
 
-def a3l(L: list) -> np.ndarray:
+def arr_from_list(L: list) -> np.ndarray:
     """Converts list to numpy array.
     Arguments:
         L {list} -- The list to convert containing 3 elements.
     Returns:
         np.array -- Numpy array with the same contents as the list.
     """
-    if len(L) == 3:
-        return np.array(L)
-    else:
-        return np.array(L[0], L[1], L[2])
+    if len(L) != 3:
+        raise ValueError('Expected a list of length 3.')
+    return np.array(L[0], L[1], L[2])
 
 
-def a3r(R: Rotator) -> np.ndarray:
+def arr_from_rot(R: Rotator) -> np.ndarray:
     """Converts rotator to numpy array.
 
     Arguments:
@@ -145,7 +144,7 @@ def a3r(R: Rotator) -> np.ndarray:
     return np.array([R.pitch, R.yaw, R.roll])
 
 
-def a3v(V: Vector3) -> np.ndarray:
+def arr_from_vec(V: Vector3) -> np.ndarray:
     """Converts vector3 to numpy array.
 
     Arguments:
