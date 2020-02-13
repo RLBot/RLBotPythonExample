@@ -2,8 +2,10 @@ import math
 
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
+from rlbot.utils.structures.quick_chats import QuickChats
 
 from util.orientation import Orientation
+from util.spikes import SpikeWatcher
 from util.vec import Vec3
 from util.sequence import Sequence, ControlStep
 
@@ -14,17 +16,22 @@ class MyBot(BaseAgent):
         # This runs once before the bot starts up
         self.controller_state = SimpleControllerState()
         self.active_sequence: Sequence = None
+        self.spike_watcher = SpikeWatcher()
 
     def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
 
         if self.active_sequence and not self.active_sequence.done:
             return self.active_sequence.tick(packet)
 
+        self.spike_watcher.read_packet(packet)
+
         ball_location = Vec3(packet.game_ball.physics.location)
         my_car = packet.game_cars[self.index]
         car_location = Vec3(my_car.physics.location)
         car_velocity = Vec3(my_car.physics.velocity)
 
+        # Example of using a sequence
+        # This will do a front flip if the car's velocity is between 550 and 600
         if 550 < car_velocity.length() < 600:
             self.active_sequence = Sequence([
                 ControlStep(0.05, SimpleControllerState(jump=True)),
@@ -34,13 +41,23 @@ class MyBot(BaseAgent):
             ])
             return self.active_sequence.tick(packet)
 
-        car_to_ball = ball_location - car_location
+        # Example of using the spike watcher.
+        # This will make the bot say I got it! when it spikes the ball,
+        # then release it 3 seconds later.
+        if self.spike_watcher.carrying_car == my_car:
+            if self.spike_watcher.carry_duration == 0:
+                self.send_quick_chat(QuickChats.CHAT_EVERYONE, QuickChats.Information_IGotIt)
+            elif self.spike_watcher.carry_duration > 3:
+                return SimpleControllerState(use_item=True)
 
+        # The rest of this code just ball chases.
         # Find the direction of our car using the Orientation class
         car_orientation = Orientation(my_car.physics.rotation)
         car_direction = car_orientation.forward
 
-        steer_correction_radians = find_correction(car_direction, car_to_ball)
+        target = ball_location
+        car_to_target = target - car_location
+        steer_correction_radians = find_correction(car_direction, car_to_target)
 
         self.controller_state.throttle = 1.0
         self.controller_state.steer = -1 if steer_correction_radians > 0 else 1.0
