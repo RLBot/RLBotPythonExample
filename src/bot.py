@@ -11,7 +11,7 @@ from util.sequence import Sequence, ControlStep
 from util.spikes import SpikeWatcher
 from util.vec import Vec3
 
-# Would you to use numpy utilities? Check out the np_util folder!
+# Would you like to use numpy utilities? Check out the np_util folder!
 
 class MyBot(BaseAgent):
 
