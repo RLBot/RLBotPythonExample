@@ -1,6 +1,6 @@
 '''Rocket League data pre-processing.'''
 
-from .np_utils import Car, Ball, BoostPad, a3l, a3r, a3v, orient_matrix, turn_r
+from .utils import Car, Ball, BoostPad, a3l, a3r, a3v, orient_matrix, turn_r
 
 import numpy as np
 
