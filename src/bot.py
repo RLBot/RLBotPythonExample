@@ -12,7 +12,7 @@ from util.spikes import SpikeWatcher
 from util.vec import Vec3
 
 import numpy as np
-from util.np_utils import a3v, closest_to
+from util.np_utils import a3v, closest_to, linear_predict
 
 class MyBot(BaseAgent):
 
@@ -61,7 +61,7 @@ class MyBot(BaseAgent):
             elif self.spike_watcher.carry_duration > 3:
                 return SimpleControllerState(use_item=True)
 
-        # Example to numpy utilities:
+        # Example of numpy utilities:
         # Get all car positions into an array.
         car_positions = []
         for car in packet.game_cars[:packet.num_cars]:
@@ -73,6 +73,13 @@ class MyBot(BaseAgent):
         closest_index = closest_to(ball_pos, car_positions_arr)
         # Prepare render message.
         closest_text = f'The bot with index {closest_index} is closest to the ball.'
+
+        # Render the linear prediction of the closest car.
+        closest_vel = a3v(packet.game_cars[closest_index].physics.velocity)
+        prediction = linear_predict(car_positions[closest_index], closest_vel, packet.game_info.seconds_elapsed, 2.0)
+        self.renderer.begin_rendering('prediction')
+        self.renderer.draw_polyline_3d(prediction['pos'][::30], self.renderer.pink())
+        self.renderer.end_rendering()
 
         # The rest of this code just ball chases.
         # Find the direction of our car using the Orientation class
