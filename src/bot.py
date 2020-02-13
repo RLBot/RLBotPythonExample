@@ -11,6 +11,8 @@ from util.sequence import Sequence, ControlStep
 from util.spikes import SpikeWatcher
 from util.vec import Vec3
 
+import numpy as np
+from util.np_utils import a3v, closest_to
 
 class MyBot(BaseAgent):
 
@@ -59,6 +61,19 @@ class MyBot(BaseAgent):
             elif self.spike_watcher.carry_duration > 3:
                 return SimpleControllerState(use_item=True)
 
+        # Example to numpy utilities:
+        # Get all car positions into an array.
+        car_positions = []
+        for car in packet.game_cars[:packet.num_cars]:
+            car_positions.append(a3v(car.physics.location))
+        car_positions_arr = np.vstack(car_positions)
+        # Get the ball position.
+        ball_pos = a3v(packet.game_ball.physics.location)
+        # Find the closest car to the ball.
+        closest_index = closest_to(ball_pos, car_positions_arr)
+        # Prepare render message.
+        closest_text = f'The bot with index {closest_index} is closest to the ball.'
+
         # The rest of this code just ball chases.
         # Find the direction of our car using the Orientation class
         car_orientation = Orientation(my_car.physics.rotation)
@@ -71,7 +86,7 @@ class MyBot(BaseAgent):
         self.controller_state.throttle = 1.0
         self.controller_state.steer = -1 if steer_correction_radians > 0 else 1.0
 
-        draw_debug(self.renderer, [goal_text])
+        draw_debug(self.renderer, [goal_text, closest_text])
 
         return self.controller_state
 
@@ -97,7 +112,7 @@ def find_correction(current: Vec3, ideal: Vec3) -> float:
 
 def draw_debug(renderer, text_lines: List[str]):
     renderer.begin_rendering()
-    y = 200
+    y = 250
     for line in text_lines:
         renderer.draw_string_2d(50, y, 1, 1, line, renderer.yellow())
         y += 20

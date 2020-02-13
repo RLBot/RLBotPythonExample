@@ -75,7 +75,7 @@ class Ball:
         vel {np.ndarray} -- Velocity vector.
         ang_vel {np.ndarray} -- Angular velocity (x, y, z). Chip's omega.
         predict {Prediction} -- Ball prediction.
-        last_touch {dict} -- Last touch information.
+        last_touch {struct} -- Last touch information.
     """
     __slots__ = [
         'pos',
@@ -304,6 +304,9 @@ def turn_r(v: np.ndarray) -> float:
     s = np.linalg.norm(v)
     return -6.901E-11 * s**4 + 2.1815E-07 * s**3 - 5.4437E-06 * s**2 + 0.12496671 * s + 157
 
+# -----------------------------------------------------------
+
+# OTHER:
 
 def linear_predict(start_pos: np.ndarray, start_vel: np.ndarray, start_time: float, seconds: float) -> np.ndarray:
     """Predicts motion of object in a straight line.
@@ -332,9 +335,21 @@ def linear_predict(start_pos: np.ndarray, start_vel: np.ndarray, start_time: flo
     prediction = np.array((pos, vel, time), dtype=dtype)
     return prediction
 
-# -----------------------------------------------------------
 
-# OTHER:
+def closest_to(pos: np.ndarray, others: np.ndarray) -> int:
+    """Finds the index of the closest point.
+    
+    Arguments:
+        pos {np.ndarray} -- coordinates of the position of interest.
+        others {np.ndarray} -- Array where each row is a position.
+    
+    Returns:
+        int -- index of the closest position to the position of interest.
+    """
+    vectors = others - pos
+    distances = np.sqrt(np.einsum('ij,ij->i', vectors, vectors))
+    return np.argmin(distances) # returns first if more than one is closest
+
 
 def special_sauce(x: float, a: float) -> float:
     """Modified sigmoid function.
