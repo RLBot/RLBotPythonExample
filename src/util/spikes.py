@@ -17,7 +17,7 @@ class SpikeWatcher:
             car = packet.game_cars[i]
             car_location = Vec3(car.physics.location)
             distance = car_location.dist(ball_location)
-            if distance < 190:
+            if distance < 195:
                 if distance < closest_distance:
                     closest_candidate = car
                     closest_distance = distance

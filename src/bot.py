@@ -5,10 +5,11 @@ from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 from rlbot.utils.structures.quick_chats import QuickChats
 
+from util.goal_detector import find_future_goal
 from util.orientation import Orientation
+from util.sequence import Sequence, ControlStep
 from util.spikes import SpikeWatcher
 from util.vec import Vec3
-from util.sequence import Sequence, ControlStep
 
 
 class MyBot(BaseAgent):
@@ -25,13 +26,13 @@ class MyBot(BaseAgent):
             return self.active_sequence.tick(packet)
 
         self.spike_watcher.read_packet(packet)
-
         ball_prediction = self.get_ball_prediction_struct()
+
+        # Example of predicting a goal event
         predicted_goal = find_future_goal(ball_prediction)
         goal_text = "No Goal Threats"
-
         if predicted_goal:
-            goal_text = f"Goal in {'%.4s' % str(predicted_goal[1]-packet.game_info.seconds_elapsed)}s"
+            goal_text = f"Goal in {predicted_goal.time - packet.game_info.seconds_elapsed:.2f}s"
 
         ball_location = Vec3(packet.game_ball.physics.location)
         my_car = packet.game_cars[self.index]
@@ -101,13 +102,3 @@ def draw_debug(renderer, text_lines: List[str]):
         renderer.draw_string_2d(50, y, 1, 1, line, renderer.yellow())
         y += 20
     renderer.end_rendering()
-
-
-def find_future_goal(ball_predictions):
-    for i in range(0, ball_predictions.num_slices):
-        # field length(5120) + ball radius(93) = 5213 however that results in false positives
-        if abs(ball_predictions.slices[i].physics.location.y) >= 5235:
-            # returns the position the ball crosses the goal as well as the time it's predicted to occur
-            return [Vec3(ball_predictions.slices[i].physics.location), ball_predictions.slices[i].game_seconds]
-
-    return None
