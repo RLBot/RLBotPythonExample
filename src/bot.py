@@ -22,6 +22,10 @@ class MyBot(BaseAgent):
         self.spike_watcher = SpikeWatcher()
 
     def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
+        """
+        This function will be called by the framework many times per second. This is where you can
+        see the motion of the ball, etc. and return controls to drive your car.
+        """
 
         if self.active_sequence and not self.active_sequence.done:
             return self.active_sequence.tick(packet)
@@ -61,7 +65,7 @@ class MyBot(BaseAgent):
                 return SimpleControllerState(use_item=True)
 
         # The rest of this code just ball chases.
-        # Find the direction of our car using the Orientation class
+        # Find the direction of your car using the Orientation class
         car_orientation = Orientation(my_car.physics.rotation)
         car_direction = car_orientation.forward
 
@@ -70,15 +74,32 @@ class MyBot(BaseAgent):
         steer_correction_radians = find_correction(car_direction, car_to_target)
 
         self.controller_state.throttle = 1.0
-        self.controller_state.steer = -1 if steer_correction_radians > 0 else 1.0
+
+        # Change the multiplier to influence the sharpness of steering. You'll wiggle if it's too high.
+        self.controller_state.steer = limit_to_safe_range(-steer_correction_radians * 5)
 
         draw_debug(self.renderer, [goal_text])
 
         return self.controller_state
 
 
+def limit_to_safe_range(value: float) -> float:
+    """
+    Controls like throttle, steer, pitch, yaw, and roll need to be in the range of -1 to 1.
+    This will ensure your number is in that range. Something like 0.45 will stay as it is,
+    but a value of -5.6 would be changed to -1.
+    """
+    if value < -1:
+        return -1
+    if value > 1:
+        return 1
+    return value
+
+
 def find_correction(current: Vec3, ideal: Vec3) -> float:
-    # Finds the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
+    """
+    Finds the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
+    """
 
     # The in-game axes are left handed, so use -x
     current_in_radians = math.atan2(current.y, -current.x)
@@ -97,6 +118,11 @@ def find_correction(current: Vec3, ideal: Vec3) -> float:
 
 
 def draw_debug(renderer, text_lines: List[str]):
+    """
+    This will draw the lines of text in the upper left corner.
+    This function will automatically put appropriate spacing between each line
+    so they don't overlap.
+    """
     renderer.begin_rendering()
     y = 250
     for line in text_lines:
