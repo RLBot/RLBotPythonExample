@@ -1,15 +1,16 @@
-import math
 from typing import List
 
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 from rlbot.utils.structures.quick_chats import QuickChats
 
+from util.aerial import AerialStep, LineUpForAerialStep
+from util.drive import steer_toward_target
 from util.goal_detector import find_future_goal
-from util.orientation import Orientation
 from util.sequence import Sequence, ControlStep
 from util.spikes import SpikeWatcher
 from util.vec import Vec3
+
 
 # Would you like to use numpy utilities? Check out the np_util folder!
 
@@ -27,6 +28,8 @@ class MyBot(BaseAgent):
         see the motion of the ball, etc. and return controls to drive your car.
         """
 
+        # This is good to keep at the beginning of get_output. It will allow you to continue
+        # any sequences that you may have started during a previous call to get_output.
         if self.active_sequence and not self.active_sequence.done:
             return self.active_sequence.tick(packet)
 
@@ -39,9 +42,7 @@ class MyBot(BaseAgent):
         if predicted_goal:
             goal_text = f"Goal in {predicted_goal.time - packet.game_info.seconds_elapsed:.2f}s"
 
-        ball_location = Vec3(packet.game_ball.physics.location)
         my_car = packet.game_cars[self.index]
-        car_location = Vec3(my_car.physics.location)
         car_velocity = Vec3(my_car.physics.velocity)
 
         # Example of using a sequence
@@ -57,64 +58,32 @@ class MyBot(BaseAgent):
 
         # Example of using the spike watcher.
         # This will make the bot say I got it! when it spikes the ball,
-        # then release it 3 seconds later.
+        # then release it 2 seconds later.
         if self.spike_watcher.carrying_car == my_car:
             if self.spike_watcher.carry_duration == 0:
                 self.send_quick_chat(QuickChats.CHAT_EVERYONE, QuickChats.Information_IGotIt)
-            elif self.spike_watcher.carry_duration > 3:
+            elif self.spike_watcher.carry_duration > 2:
                 return SimpleControllerState(use_item=True)
 
-        # The rest of this code just ball chases.
-        # Find the direction of your car using the Orientation class
-        car_orientation = Orientation(my_car.physics.rotation)
-        car_direction = car_orientation.forward
+        # Example of doing an aerial. This will cause the car to jump and fly toward the
+        # ceiling in the middle of the field.
+        if my_car.boost > 50 and my_car.has_wheel_contact:
+            self.start_aerial(Vec3(0, 0, 2000), packet.game_info.seconds_elapsed + 4)
 
-        target = ball_location
-        car_to_target = target - car_location
-        steer_correction_radians = find_correction(car_direction, car_to_target)
-
+        # If nothing else interesting happened, just chase the ball!
+        ball_location = Vec3(packet.game_ball.physics.location)
+        self.controller_state.steer = steer_toward_target(my_car, ball_location)
         self.controller_state.throttle = 1.0
 
-        # Change the multiplier to influence the sharpness of steering. You'll wiggle if it's too high.
-        self.controller_state.steer = limit_to_safe_range(-steer_correction_radians * 5)
-
+        # Draw some text on the screen
         draw_debug(self.renderer, [goal_text])
 
         return self.controller_state
 
-
-def limit_to_safe_range(value: float) -> float:
-    """
-    Controls like throttle, steer, pitch, yaw, and roll need to be in the range of -1 to 1.
-    This will ensure your number is in that range. Something like 0.45 will stay as it is,
-    but a value of -5.6 would be changed to -1.
-    """
-    if value < -1:
-        return -1
-    if value > 1:
-        return 1
-    return value
-
-
-def find_correction(current: Vec3, ideal: Vec3) -> float:
-    """
-    Finds the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
-    """
-
-    # The in-game axes are left handed, so use -x
-    current_in_radians = math.atan2(current.y, -current.x)
-    ideal_in_radians = math.atan2(ideal.y, -ideal.x)
-
-    diff = ideal_in_radians - current_in_radians
-
-    # Make sure that diff is between -pi and +pi.
-    if abs(diff) > math.pi:
-        if diff < 0:
-            diff += 2 * math.pi
-        else:
-            diff -= 2 * math.pi
-
-    return diff
+    def start_aerial(self, target: Vec3, arrival_time: float):
+        self.active_sequence = Sequence([
+            LineUpForAerialStep(target, arrival_time, self.index),
+            AerialStep(target, arrival_time, self.index)])
 
 
 def draw_debug(renderer, text_lines: List[str]):
