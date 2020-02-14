@@ -11,6 +11,7 @@ from util.sequence import Sequence, ControlStep
 from util.spikes import SpikeWatcher
 from util.vec import Vec3
 
+# Would you like to use numpy utilities? Check out the np_util folder!
 
 class MyBot(BaseAgent):
 
@@ -97,7 +98,7 @@ def find_correction(current: Vec3, ideal: Vec3) -> float:
 
 def draw_debug(renderer, text_lines: List[str]):
     renderer.begin_rendering()
-    y = 200
+    y = 250
     for line in text_lines:
         renderer.draw_string_2d(50, y, 1, 1, line, renderer.yellow())
         y += 20
