@@ -109,3 +109,7 @@ ENV/
 
 # Gradle files
 /.gradle
+
+# VSCode
+.vscode/
+*.code-workspace
