@@ -46,7 +46,7 @@ class MyBot(BaseAgent):
 
         # Example of using a sequence
         # This will do a front flip if the car's velocity is between 550 and 600
-        if 550 < car_velocity.length() < 600:
+        if 550 < car_velocity.length < 600:
             self.active_sequence = Sequence([
                 ControlStep(0.05, SimpleControllerState(jump=True)),
                 ControlStep(0.05, SimpleControllerState(jump=False)),
