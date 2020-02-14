@@ -1,8 +1,9 @@
 import math
 from typing import Union
 
+from rlbot.utils.structures.game_data_struct import Vector3
 
-# This is a helper class for vector math. You can extend it or delete if you want.
+
 class Vec3:
     """
     This class should provide you with all the basic vector operations that you need, but feel free to extend its
@@ -21,7 +22,7 @@ class Vec3:
         'z'
     ]
 
-    def __init__(self, x: Union[float, 'Vec3']=0, y: float=0, z: float=0):
+    def __init__(self, x: Union[float, 'Vec3', 'Vector3']=0, y: float=0, z: float=0):
         """
         Create a new Vec3. The x component can alternatively be another vector with an x, y, and z component, in which
         case the created vector is a copy of the given vector and the y and z parameter is ignored. Examples:
@@ -74,23 +75,21 @@ class Vec3:
         """Returns a new Vec3 that equals this Vec3 but projected onto the ground plane. I.e. where z=0."""
         return Vec3(self.x, self.y, 0)
 
-    @property
     def length(self):
         """Returns the length of the vector. Also called magnitude and norm."""
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def dist(self, other: 'Vec3') -> float:
         """Returns the distance between this vector and another vector using pythagoras."""
-        return (self - other).length
+        return (self - other).length()
 
-    @property
     def normalized(self):
         """Returns a vector with the same direction but a length of one."""
-        return self / self.length
+        return self / self.length()
 
     def rescale(self, new_len: float) -> 'Vec3':
         """Returns a vector with the same direction but a different length."""
-        return new_len * self.normalized
+        return new_len * self.normalized()
 
     def dot(self, other: 'Vec3') -> float:
         """Returns the dot product."""
@@ -106,5 +105,5 @@ class Vec3:
 
     def ang_to(self, ideal: 'Vec3') -> float:
         """Returns the angle to the ideal vector. Angle will be between 0 and pi."""
-        cos_ang = self.dot(ideal) / (self.length * ideal.length)
+        cos_ang = self.dot(ideal) / (self.length() * ideal.length())
         return math.acos(cos_ang)
