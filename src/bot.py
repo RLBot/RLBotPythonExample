@@ -4,7 +4,6 @@ from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 from rlbot.utils.structures.quick_chats import QuickChats
 
-from util.aerial import AerialStep, LineUpForAerialStep
 from util.drive import steer_toward_target
 from util.goal_detector import find_future_goal
 from util.sequence import Sequence, ControlStep
@@ -65,11 +64,6 @@ class MyBot(BaseAgent):
             elif self.spike_watcher.carry_duration > 2:
                 return SimpleControllerState(use_item=True)
 
-        # Example of doing an aerial. This will cause the car to jump and fly toward the
-        # ceiling in the middle of the field.
-        if my_car.boost > 50 and my_car.has_wheel_contact:
-            self.start_aerial(Vec3(0, 0, 2000), packet.game_info.seconds_elapsed + 4)
-
         # If nothing else interesting happened, just chase the ball!
         ball_location = Vec3(packet.game_ball.physics.location)
         self.controller_state.steer = steer_toward_target(my_car, ball_location)
@@ -79,11 +73,6 @@ class MyBot(BaseAgent):
         draw_debug(self.renderer, [goal_text])
 
         return self.controller_state
-
-    def start_aerial(self, target: Vec3, arrival_time: float):
-        self.active_sequence = Sequence([
-            LineUpForAerialStep(target, arrival_time, self.index),
-            AerialStep(target, arrival_time, self.index)])
 
 
 def draw_debug(renderer, text_lines: List[str]):

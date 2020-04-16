@@ -1,3 +1,5 @@
+# Warning! These imports only work if you are using
+# Python 3.7 64bit, since they rely on specific binaries.
 from RLUtilities.GameInfo import GameInfo
 from RLUtilities.LinearAlgebra import vec3
 from RLUtilities.Maneuvers import Aerial
