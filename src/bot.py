@@ -8,7 +8,6 @@ from util.aerial import AerialStep, LineUpForAerialStep
 from util.drive import steer_toward_target
 from util.goal_detector import find_future_goal
 from util.sequence import Sequence, ControlStep
-from util.spikes import SpikeWatcher
 from util.vec import Vec3
 
 
@@ -20,7 +19,6 @@ class MyBot(BaseAgent):
         # This runs once before the bot starts up
         self.controller_state = SimpleControllerState()
         self.active_sequence: Sequence = None
-        self.spike_watcher = SpikeWatcher()
 
     def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
         """
@@ -33,7 +31,6 @@ class MyBot(BaseAgent):
         if self.active_sequence and not self.active_sequence.done:
             return self.active_sequence.tick(packet)
 
-        self.spike_watcher.read_packet(packet)
         ball_prediction = self.get_ball_prediction_struct()
 
         # Example of predicting a goal event
@@ -56,18 +53,10 @@ class MyBot(BaseAgent):
             ])
             return self.active_sequence.tick(packet)
 
-        # Example of using the spike watcher.
-        # This will make the bot say I got it! when it spikes the ball,
-        # then release it 2 seconds later.
-        if self.spike_watcher.carrying_car == my_car:
-            if self.spike_watcher.carry_duration == 0:
-                self.send_quick_chat(QuickChats.CHAT_EVERYONE, QuickChats.Information_IGotIt)
-            elif self.spike_watcher.carry_duration > 2:
-                return SimpleControllerState(use_item=True)
 
         # Example of doing an aerial. This will cause the car to jump and fly toward the
         # ceiling in the middle of the field.
-        if my_car.boost > 50 and my_car.has_wheel_contact:
+        if my_car.has_wheel_contact and packet.game_ball.physics.location.z > 1000:
             self.start_aerial(Vec3(0, 0, 2000), packet.game_info.seconds_elapsed + 4)
 
         # If nothing else interesting happened, just chase the ball!
