@@ -1,71 +1,76 @@
-import math
-
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
+from rlbot.messages.flat.QuickChatSelection import QuickChatSelection
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
-from util.orientation import Orientation
+from util.ball_prediction_analysis import find_slice_at_time
+from util.drive import steer_toward_target
+from util.sequence import Sequence, ControlStep
 from util.vec import Vec3
 
 
 class MyBot(BaseAgent):
 
-    def initialize_agent(self):
-        # This runs once before the bot starts up
-        self.controller_state = SimpleControllerState()
+    def __init__(self, name, team, index):
+        super().__init__(name, team, index)
+        self.active_sequence: Sequence = None
 
     def get_output(self, packet: GameTickPacket) -> SimpleControllerState:
-        ball_location = Vec3(packet.game_ball.physics.location)
+        """
+        This function will be called by the framework many times per second. This is where you can
+        see the motion of the ball, etc. and return controls to drive your car.
+        """
 
+        # Start the renderer. Make sure you call end_rendering at the end of this function.
+        self.renderer.begin_rendering()
+
+        # This is good to keep at the beginning of get_output. It will allow you to continue
+        # any sequences that you may have started during a previous call to get_output.
+        if self.active_sequence and not self.active_sequence.done:
+            return self.active_sequence.tick(packet)
+
+        # Gather some information about our car and the ball
         my_car = packet.game_cars[self.index]
         car_location = Vec3(my_car.physics.location)
+        car_velocity = Vec3(my_car.physics.velocity)
+        ball_location = Vec3(packet.game_ball.physics.location)
 
-        car_to_ball = ball_location - car_location
-
-        # Find the direction of our car using the Orientation class
-        car_orientation = Orientation(my_car.physics.rotation)
-        car_direction = car_orientation.forward
-
-        steer_correction_radians = find_correction(car_direction, car_to_ball)
-
-        if steer_correction_radians > 0:
-            # Positive radians in the unit circle is a turn to the left.
-            turn = -1.0  # Negative value for a turn to the left.
-            action_display = "turn left"
+        if car_location.dist(ball_location) > 1000:
+            # We're far away from the ball, let's try to lead it a little bit
+            ball_prediction = self.get_ball_prediction_struct()  # This can predict bounces, etc
+            ball_in_future = find_slice_at_time(ball_prediction, packet.game_info.seconds_elapsed + 2)
+            target_location = Vec3(ball_in_future.physics.location)
         else:
-            turn = 1.0
-            action_display = "turn right"
+            target_location = ball_location
 
-        self.controller_state.throttle = 1.0
-        self.controller_state.steer = turn
+        # Draw some things to help understand what the bot is thinking
+        self.renderer.draw_line_3d(car_location, target_location, self.renderer.white())
+        self.renderer.draw_string_3d(car_location, 1, 1, f'Speed: {car_velocity.length():.1f}', self.renderer.white())
 
-        draw_debug(self.renderer, my_car, packet.game_ball, action_display)
+        if 750 < car_velocity.length() < 800:
+            # We'll do a front flip if the car is moving at a certain speed.
+            return self.begin_front_flip(packet)
 
-        return self.controller_state
+        controls = SimpleControllerState()
+        controls.steer = steer_toward_target(my_car, target_location)
+        controls.throttle = 1.0
+        # You can set more controls if you want, like controls.boost.
 
+        # Send any drawing we may have done
+        self.renderer.end_rendering()
+        return controls
 
-def find_correction(current: Vec3, ideal: Vec3) -> float:
-    # Finds the angle from current to ideal vector in the xy-plane. Angle will be between -pi and +pi.
+    def begin_front_flip(self, packet):
+        # Send some quickchat just for fun
+        self.send_quick_chat(team_only=False, quick_chat=QuickChatSelection.Information_IGotIt)
 
-    # The in-game axes are left handed, so use -x
-    current_in_radians = math.atan2(current.y, -current.x)
-    ideal_in_radians = math.atan2(ideal.y, -ideal.x)
+        # Do a front flip. We will be committed to this for a few seconds and the bot will ignore other
+        # logic during that time because we are setting the active_sequence.
+        self.active_sequence = Sequence([
+            ControlStep(duration=0.05, controls=SimpleControllerState(jump=True)),
+            ControlStep(duration=0.05, controls=SimpleControllerState(jump=False)),
+            ControlStep(duration=0.2, controls=SimpleControllerState(jump=True, pitch=-1)),
+            ControlStep(duration=0.8, controls=SimpleControllerState()),
+        ])
 
-    diff = ideal_in_radians - current_in_radians
-
-    # Make sure that diff is between -pi and +pi.
-    if abs(diff) > math.pi:
-        if diff < 0:
-            diff += 2 * math.pi
-        else:
-            diff -= 2 * math.pi
-
-    return diff
-
-
-def draw_debug(renderer, car, ball, action_display):
-    renderer.begin_rendering()
-    # draw a line from the car to the ball
-    renderer.draw_line_3d(car.physics.location, ball.physics.location, renderer.white())
-    # print the action that the bot is taking
-    renderer.draw_string_3d(car.physics.location, 2, 2, action_display, renderer.white())
-    renderer.end_rendering()
+        # Return the controls associated with the beginning of the sequence so we can start right away.
+        return self.active_sequence.tick(packet)
