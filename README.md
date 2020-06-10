@@ -1,8 +1,8 @@
 # RLBotPythonExample
-Example of a python bot using the RLBot framework
+Example of a Python bot using the RLBot framework
 
 ## Quick Start
-The easiest way to start a python bot is demonstrated here!
+The easiest way to start a Python bot is demonstrated here!
 https://youtu.be/YJ69QZ-EX7k
 
 It shows you how to:
