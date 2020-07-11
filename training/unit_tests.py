@@ -3,7 +3,7 @@ import unittest
 from rlbot.training.training import Pass, Fail
 from rlbottraining.exercise_runner import run_playlist
 
-from hello_world_training import StrikerPatience
+from hello_world_training import StrikerPatience, add_my_bot_to_playlist
 
 class PatienceTest(unittest.TestCase):
     """
@@ -18,7 +18,8 @@ class PatienceTest(unittest.TestCase):
     """
 
     def test_patience_required(self):
-        result_iter = run_playlist([StrikerPatience(name='patience required')])
+        playlist = [StrikerPatience(name='patience required')]
+        result_iter = run_playlist(add_my_bot_to_playlist(playlist))
         results = list(result_iter)
         self.assertEqual(len(results), 1)
         result = results[0]
@@ -26,7 +27,8 @@ class PatienceTest(unittest.TestCase):
         self.assertIsInstance(result.grade, Fail)  # If you make the bot is smarter, update this assert that we pass.
 
     def test_no_patience_required(self):
-        result_iter = run_playlist([StrikerPatience(name='no patience required', car_start_x=-1000)])
+        playlist = [StrikerPatience(name='no patience required', car_start_x=-1000)]
+        result_iter = run_playlist(add_my_bot_to_playlist(playlist))
         results = list(result_iter)
         self.assertEqual(len(results), 1)
         result = results[0]
