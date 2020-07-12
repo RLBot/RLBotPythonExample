@@ -25,14 +25,8 @@ if __name__ == '__main__':
         subprocess.call([sys.executable, "-m", "pip", "install", '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
 
     try:
-        if len(sys.argv) > 1 and sys.argv[1] == 'gui':
-            from rlbot.gui.qt_root import RLBotQTGui
-
-            RLBotQTGui.main()
-        else:
-            from rlbot import runner
-
-            runner.main()
+        from rlbot import runner
+        runner.main()
     except Exception as e:
         print("Encountered exception: ", e)
         print("Press enter to close.")
