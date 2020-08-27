@@ -16,7 +16,7 @@ from drive_to_ball_grader import DriveToBallGrader
 
 def make_match_config_with_my_bot() -> MatchConfig:
     # Makes a config which only has our bot in it for now.
-    # For more defails: https://youtu.be/uGFmOZCpel8?t=375
+    # For more details: https://youtu.be/uGFmOZCpel8?t=375
     match_config = make_empty_match_config()
     match_config.player_configs = [
         PlayerConfig.bot_config(
