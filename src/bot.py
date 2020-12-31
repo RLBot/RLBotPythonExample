@@ -31,7 +31,7 @@ class MyBot(BaseAgent):
 
         # This is good to keep at the beginning of get_output. It will allow you to continue
         # any sequences that you may have started during a previous call to get_output.
-        if self.active_sequence and not self.active_sequence.done:
+        if self.active_sequence is not None and not self.active_sequence.done:
             controls = self.active_sequence.tick(packet)
             if controls is not None:
                 return controls
@@ -42,14 +42,19 @@ class MyBot(BaseAgent):
         car_velocity = Vec3(my_car.physics.velocity)
         ball_location = Vec3(packet.game_ball.physics.location)
 
+        # By default we will chase the ball, but target_location can be changed later
+        target_location = ball_location
+
         if car_location.dist(ball_location) > 1500:
             # We're far away from the ball, let's try to lead it a little bit
             ball_prediction = self.get_ball_prediction_struct()  # This can predict bounces, etc
             ball_in_future = find_slice_at_time(ball_prediction, packet.game_info.seconds_elapsed + 2)
-            target_location = Vec3(ball_in_future.physics.location)
-            self.renderer.draw_line_3d(ball_location, target_location, self.renderer.cyan())
-        else:
-            target_location = ball_location
+
+            # ball_in_future might be None if we don't have an adequate ball prediction right now, like during
+            # replays, so check it to avoid errors.
+            if ball_in_future is not None:
+                target_location = Vec3(ball_in_future.physics.location)
+                self.renderer.draw_line_3d(ball_location, target_location, self.renderer.cyan())
 
         # Draw some things to help understand what the bot is thinking
         self.renderer.draw_line_3d(car_location, target_location, self.renderer.white())
