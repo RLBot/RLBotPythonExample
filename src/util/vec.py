@@ -75,7 +75,11 @@ class Vec3:
         """Returns a new Vec3 that equals this Vec3 but projected onto the ground plane. I.e. where z=0."""
         return Vec3(self.x, self.y, 0)
 
-    def length(self):
+    def flat_non_zero(self):
+        """Returns a new Vec3 that equals this Vec3 but projected onto the ground plane. I.e. where z=0.1 to prevent zero-length."""
+        return Vec3(self.x, self.y, 0.1)
+
+    def length(self) -> float:
         """Returns the length of the vector. Also called magnitude and norm."""
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 

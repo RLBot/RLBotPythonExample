@@ -1,4 +1,5 @@
-from typing import Callable
+from typing import Callable, List
+from util.vec import Vec3
 
 from rlbot.utils.structures.ball_prediction_struct import BallPrediction, Slice
 
@@ -11,7 +12,7 @@ GOAL_THRESHOLD = 5235
 GOAL_SEARCH_INCREMENT = 20
 
 
-def find_slice_at_time(ball_prediction: BallPrediction, game_time: float):
+def find_slice_at_time(ball_prediction: BallPrediction, game_time: float) -> Slice:
     """
     This will find the future position of the ball at the specified time. The returned
     Slice object will also include the ball's velocity, etc.
@@ -46,3 +47,16 @@ def find_matching_slice(ball_prediction: BallPrediction, start_index: int, predi
                 if predicate(ball_slice):
                     return ball_slice
     return None
+
+def get_continuous_ball_prediction(ball_prediction: BallPrediction, game_time: float, max_time: float) -> List[Vec3]:
+    result = []
+    for time in [game_time + x/60 for x in range (60* int(max_time))]:
+        prediction = find_slice_at_time(ball_prediction, time)
+        if prediction:
+            result.append(prediction.physics.location)
+    return result
+
+def get_single_ball_prediction(ball_prediction: BallPrediction, game_time: float) -> Vec3:
+    prediction = find_slice_at_time(ball_prediction, game_time)
+    if prediction:
+            return Vec3(prediction.physics.location)
